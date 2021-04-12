@@ -31,24 +31,36 @@
 
 
                         <!-- <div id="controls" class="is-flex justify-content is-justify-content-center	"> -->
-                        <div id="controls" class="columns">
-                            <div class="column p-1">
-                                <button class='button is-fullwidth' data-action="start">Start</button>
+                        <div id="controls">
+                            <div class="columns is-centered mb-0">
+                                <div class="buttons are-large">
+                                    <div class="column p-1">
+                                        <button class='button is-fullwidth is-success is-delayed'
+                                            data-action="start">Start</button>
+                                    </div>
+                                    <div class="column p-1">
+                                        <button class='button is-fullwidth is-success is-delayed is-small is-inverted'
+                                            data-action="next" disabled>Next</button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="column p-1">
-                                <button class='button is-fullwidth' data-action="skip" disabled>Skip</button>
-                            </div>
-                            <div class="column p-1">
-                                <button class='button is-fullwidth' data-action="pause" disabled>Pause</button>
-                            </div>
-                            <div class="column p-1">
-                                <button class='button is-fullwidth' data-action="reset" disabled>Reset</button>
-                            </div>
-                            <div class="column p-1">
-                                <button class='button is-fullwidth' data-action="next" disabled>Next</button>
+                            <div class="columns is-centered">
+                                <div class="buttons are-small">
+                                    <div class="column p-1">
+                                        <button class='button is-inverted is-info is-delayed' data-action="skip"
+                                            disabled>Skip</button>
+                                    </div>
+                                    <div class="column p-1">
+                                        <button class='button is-inverted is-info is-delayed' data-action="pause"
+                                            disabled>Pause</button>
+                                    </div>
+                                    <div class="column p-1">
+                                        <button class='button is-inverted is-info is-delayed' data-action="reset"
+                                            disabled>Reset</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

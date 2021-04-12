@@ -97,14 +97,17 @@ class Pomodoro {
             return;
         }
 
-        this.status = 'running';
+        // this.status = 'running';
 
         this.notify({ status: 'warning', message: 'mode not yet finished.' })
+
+        let wasPaused = this.status === 'paused'
 
         this.stop()
         this.#modeIndex = this.nextMode
         this.#currentMode = Object.keys(this.modes)[this.#modeIndex];
         this.start()
+        if (wasPaused) this.pause()
     }
 
     reset() {

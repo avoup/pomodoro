@@ -58,6 +58,11 @@ const drawLogs = (log) => {
     }
 }
 
+const resetBtnSize = () => {
+    pause.classList.remove('is-normal')
+    skip.classList.remove('is-normal')
+    reset.classList.remove('is-normal')
+}
 /**
  * Set initial modes and times(in seconds)
  */
@@ -95,15 +100,33 @@ drawLogs()
 const start = controls.querySelector('[data-action=start]');
 start.addEventListener('click', e => {
     if (pomodoro.status === 'running') {
-        e.target.textContent = 'Start';
+        start.textContent = 'Start';
         pomodoro.stop()
+
+        next.classList.add('is-small')
+        next.classList.add('is-inverted')
+        start.classList.remove('is-small')
+        start.classList.remove('is-inverted')
+
+        reset.disabled = true;
+        skip.disabled = true;
+        pause.disabled = true;
+
         drawLogs(pomodoro.lastLog)
     } else {
-        e.target.textContent = 'Stop';
+        start.textContent = 'Stop';
         pomodoro.start()
+
+        next.classList.remove('is-small')
+        next.classList.remove('is-inverted')
+        start.classList.add('is-inverted')
+        start.classList.add('is-small')
+
         skip.disabled = false;
         pause.disabled = false;
+
     }
+    resetBtnSize()
     pause.textContent = 'Pause'
 })
 
@@ -111,13 +134,16 @@ start.addEventListener('click', e => {
  * Pause
  */
 const pause = controls.querySelector('[data-action=pause]');
-pause.addEventListener('click', e => {
+pause.addEventListener('click', () => {
+    resetBtnSize()
     if (pomodoro.status === 'running') {
-        e.target.textContent = 'Resume'
+        pause.classList.add('is-normal')
+        pause.textContent = 'Resume'
         start.textContent = 'Start';
         reset.disabled = false;
     } else {
-        e.target.textContent = 'Pause'
+        pause.classList.remove('is-normal')
+        pause.textContent = 'Pause'
         start.textContent = 'Stop';
         reset.disabled = true;
     }
@@ -129,6 +155,8 @@ pause.addEventListener('click', e => {
  */
 const skip = controls.querySelector('[data-action=skip]');
 skip.addEventListener('click', e => {
+    resetBtnSize()
+
     pomodoro.next(true)
     drawLogs()
 })
@@ -138,6 +166,12 @@ skip.addEventListener('click', e => {
  */
 const reset = controls.querySelector('[data-action=reset]');
 reset.addEventListener('click', e => {
+    pause.disabled = true;
+    pause.textContent = 'Pause';
+    skip.disabled = true;
+    reset.disabled = true;
+
+    resetBtnSize()
     pomodoro.reset()
 })
 
