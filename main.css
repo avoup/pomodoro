@@ -1,0 +1,15 @@
+.table tr:nth-child(even) {
+    background-color: #f6f6f6;
+}
+
+.max-width-600 {
+    max-width: 600px !important;
+}
+
+.max-width-300 {
+    max-width: 300px !important;
+}
+
+.is-centered {
+    margin: auto;
+}

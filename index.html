@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+    <link rel="stylesheet" href="main.css">
+    <script src="pomodoro.js" defer></script>
+    <script src="main.js" defer></script>
+    <title>Pomodoro</title>
+</head>
+
+<body>
+
+    <section class="section">
+        <div class="container max-width-600">
+            <div class="card mb-6">
+                <header class="card-header">
+                    <p class="title card-header-title">Pomodoro</p>
+                </header>
+                <div class="card-content">
+                    <div class="content">
+                        <div id="message"
+                            class="is-centered notification has-text-centered is-size-6 is-hidden p-2 max-width-300">
+                        </div>
+                        <div id="clock" class="has-text-centered is-size-1 has-text-weight-bold">00:25:00</div>
+                        <progress id="progressBar" class="progress is-link" value="100" max="100">100%</progress>
+
+
+
+                        <!-- <div id="controls" class="is-flex justify-content is-justify-content-center	"> -->
+                        <div id="controls" class="columns">
+                            <div class="column p-1">
+                                <button class='button is-fullwidth' data-action="start">Start</button>
+                            </div>
+                            <div class="column p-1">
+                                <button class='button is-fullwidth' data-action="skip" disabled>Skip</button>
+                            </div>
+                            <div class="column p-1">
+                                <button class='button is-fullwidth' data-action="pause" disabled>Pause</button>
+                            </div>
+                            <div class="column p-1">
+                                <button class='button is-fullwidth' data-action="reset" disabled>Reset</button>
+                            </div>
+                            <div class="column p-1">
+                                <button class='button is-fullwidth' data-action="next" disabled>Next</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-6">
+                <header class="card-header">
+                    <p class="title card-header-title">Settings</p>
+                </header>
+                <div class="card-content">
+                    <div class="content">
+                        <div class="columns">
+                            <div class="column">
+                                <label class="label" for="focus-time">Focus time length</label>
+                                <input id="focus-time" class="input is-link" type="number" value="25">
+                            </div>
+                            <div class="column">
+                                <label class="label" for="rest-time">Rest time length</label>
+                                <input id="rest-time" class="input is-link" type="number" value="5">
+                            </div>
+                        </div>
+
+                        <button id='update-time' class="button is-fullwidth mb-6">Update</button>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <header class="card-header">
+                    <p class="title card-header-title">Logs</p>
+                </header>
+                <div class="card-content">
+                    <div class="content" style="overflow: auto">
+                        <span id="overallTime">00:00:00</span>
+                        <table class='table'>
+                            <thead>
+                                <tr>
+                                    <th>Index</th>
+                                    <th>Planned/Actual time</th>
+                                    <th>Mode</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id='log'>
+
+                            </tbody>
+
+                        </table>
+                        <button class="button" id="cleanLog">Clean log</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</body>
+
+</html>
