@@ -58,6 +58,9 @@ const drawLogs = (log) => {
     }
 }
 
+/**
+ * Reset buttons' style
+ */
 const resetBtnSize = () => {
     pause.classList.remove('is-normal')
     skip.classList.remove('is-normal')

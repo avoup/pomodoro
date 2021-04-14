@@ -5,17 +5,17 @@ class Pomodoro {
         this.notify = notify;
         this.updateCb = updateCb;
 
-        this.#currentMode = Object.keys(this.modes)[this.#modeIndex]
-        this.#setLog()
-        this.#resetTime()
-        this.#updateClock()
+        this._currentMode = Object.keys(this.modes)[this._modeIndex]
+        this._setLog()
+        this._resetTime()
+        this._updateClock()
 
     }
 
     /**
      * set log / log index
      */
-    #setLog() {
+    _setLog() {
         let log = localStorage.getItem('pomolog');
         if (!log) {
             localStorage.setItem('pomolog', '[]')
@@ -24,14 +24,14 @@ class Pomodoro {
         }
     }
 
-    #status = 'not running'
+    _status = 'not running'
 
-    #interval;
-    #currentMode;
+    _interval;
+    _currentMode;
 
-    #seconds = 0;
+    _seconds = 0;
 
-    #modeIndex = 0;
+    _modeIndex = 0;
 
     start() {
         if (this.status === 'running') return this.notify({ status: 'warning', message: 'pomodoro is already running' })
@@ -40,9 +40,9 @@ class Pomodoro {
 
         this.status = 'running';
 
-        this.#resetTime()
-        this.#updateClock()
-        this.#interval = setInterval(this.#updateClock.bind(this), 1000);
+        this._resetTime()
+        this._updateClock()
+        this._interval = setInterval(this._updateClock.bind(this), 1000);
     }
 
     stop() {
@@ -50,40 +50,40 @@ class Pomodoro {
 
         this.notify({ status: 'warning', message: 'pomodoro stopped' })
         this.newLog = {
-            'initialTime': this.modes[this.#currentMode],
-            'actualTime': this.modes[this.#currentMode] - this.#seconds - 1,
-            'mode': this.#currentMode,
+            'initialTime': this.modes[this._currentMode],
+            'actualTime': this.modes[this._currentMode] - this._seconds - 1,
+            'mode': this._currentMode,
             'date': new Date,
         };
 
         this.status = 'not running';
-        this.#stopAlarm()
+        this._stopAlarm()
 
-        this.#resetTitle()
+        this._resetTitle()
 
-        clearInterval(this.#interval)
-        this.#interval = 0;
+        clearInterval(this._interval)
+        this._interval = 0;
 
-        this.#resetTime()
-        this.#updateClock()
+        this._resetTime()
+        this._updateClock()
     }
 
     pause() {
         if (this.status === 'not running') return this.notify({ status: 'warning', message: 'pomodoro is not running' });
 
-        if (this.#interval) {
+        if (this._interval) {
             this.status = 'paused';
 
-            this.#stopAlarm()
+            this._stopAlarm()
 
-            clearInterval(this.#interval)
-            this.#interval = 0;
+            clearInterval(this._interval)
+            this._interval = 0;
 
             this.notify({ status: 'warning', message: 'pomodoro paused' })
         } else {
             this.status = 'running';
 
-            this.#interval = setInterval(this.#updateClock.bind(this), 1000);
+            this._interval = setInterval(this._updateClock.bind(this), 1000);
 
             this.notify({ status: 'success', message: 'pomodoro resumed' })
         }
@@ -92,7 +92,7 @@ class Pomodoro {
     next(skip) {
         if (this.status === 'not running') return this.notify({ status: 'warning', message: 'pomodoro is not running' })
 
-        if (this.#seconds > 0 && !skip) {
+        if (this._seconds > 0 && !skip) {
             this.notify({ status: 'warning', message: 'mode not yet finished.' })
             return;
         }
@@ -104,8 +104,8 @@ class Pomodoro {
         let wasPaused = this.status === 'paused'
 
         this.stop()
-        this.#modeIndex = this.nextMode
-        this.#currentMode = Object.keys(this.modes)[this.#modeIndex];
+        this._modeIndex = this.nextMode
+        this._currentMode = Object.keys(this.modes)[this._modeIndex];
         this.start()
         if (wasPaused) this.pause()
     }
@@ -118,11 +118,11 @@ class Pomodoro {
 
         this.notify({ status: 'warning', message: 'pomodoro reset.' })
 
-        clearInterval(this.#interval)
-        this.#interval = 0;
+        clearInterval(this._interval)
+        this._interval = 0;
 
-        this.#resetTime()
-        this.#updateClock()
+        this._resetTime()
+        this._updateClock()
     }
 
     /**
@@ -136,95 +136,95 @@ class Pomodoro {
 
         if (!time) return this.notify({ status: 'setTime', message: 'time not provided' })
         if (!mode) {
-            this.modes[this.#currentMode] = time;
+            this.modes[this._currentMode] = time;
         } else {
             this.modes[mode] = time;
         }
-        this.#resetTime()
-        this.#updateClock()
+        this._resetTime()
+        this._updateClock()
         this.notify({ status: 'success', message: `Time updated` })
     }
 
-    #updateClock() {
-        let h = Math.floor(Math.abs(this.#seconds / 3600));
-        let m = Math.floor(Math.abs((this.#seconds / 60) % 60));
-        let s = Math.floor(Math.abs(this.#seconds % 60));
+    _updateClock() {
+        let h = Math.floor(Math.abs(this._seconds / 3600));
+        let m = Math.floor(Math.abs((this._seconds / 60) % 60));
+        let s = Math.floor(Math.abs(this._seconds % 60));
         if (h < 10) h = `0${Math.abs(h)}`
         if (m < 10) m = `0${Math.abs(m)}`
         if (s < 10) s = `0${Math.abs(s)}`
         this.clock.textContent = `${h}:${m}:${s}`;
 
-        if (this.#seconds === 0) {
-            this.#initAlarm()
-            this.#startAlarm()
+        if (this._seconds === 0) {
+            this._initAlarm()
+            this._startAlarm()
             this.notify({
                 status: 'success',
                 action: 'finished',
-                message: `${this.#currentMode} finished! Start ${Object.keys(this.modes)[this.nextMode]} mode`
+                message: `${this._currentMode} finished! Start ${Object.keys(this.modes)[this.nextMode]} mode`
             })
-        } else if (this.#seconds < 0) {
-            this.#toggleTitle()
+        } else if (this._seconds < 0) {
+            this._toggleTitle()
             this.clock.textContent = '-' + this.clock.textContent;
 
-            if (this.#seconds % 5 === 0) this.#toggleAlarm()
+            if (this._seconds % 5 === 0) this._toggleAlarm()
         }
-        if (this.updateCb) this.updateCb(this.#seconds / this.modes[this.#currentMode] * 100)
-        this.#seconds--;
+        if (this.updateCb) this.updateCb(this._seconds / this.modes[this._currentMode] * 100)
+        this._seconds--;
     }
 
-    #resetTime() {
-        this.#seconds = modes[this.#currentMode];
+    _resetTime() {
+        this._seconds = modes[this._currentMode];
     }
 
     /**
      * Document title 
      */
-    #toggleTitle() {
+    _toggleTitle() {
         document.title = document.title === 'Pomodoro' ? '🚨__/FINISHED\\__🚨' : 'Pomodoro'
     }
 
-    #resetTitle() {
+    _resetTitle() {
         document.title = 'Pomodoro'
     }
 
     /**
      * Alarm sound
      */
-    #audio = new Audio();
-    #isPlaying = false;
-    #initAlarm() {
-        this.#audio.src = './alarm_1.mp3'
-        this.#audio.loop = true;
+    _audio = new Audio();
+    _isPlaying = false;
+    _initAlarm() {
+        this._audio.src = './sound/gong_1.mp3'
+        this._audio.loop = false;
     }
-    #startAlarm() {
-        this.#audio.play()
-        this.#isPlaying = true;
+    _startAlarm() {
+        this._audio.play()
+        this._isPlaying = true;
     }
-    #stopAlarm() {
-        this.#audio.pause()
-        this.#isPlaying = false;
+    _stopAlarm() {
+        this._audio.pause()
+        this._isPlaying = false;
     }
-    #toggleAlarm() {
-        if (this.#isPlaying)
-            this.#audio.pause()
+    _toggleAlarm() {
+        if (this._isPlaying)
+            this._audio.pause()
         else
-            this.#audio.play()
-        this.#isPlaying = !this.#isPlaying
+            this._audio.play()
+        this._isPlaying = !this._isPlaying
     }
 
     /**
      * Pomodoro Status
      */
     set status(status) {
-        this.#status = status;
+        this._status = status;
     }
 
     get status() {
-        return this.#status;
+        return this._status;
     }
 
     get nextMode() {
-        return (this.#modeIndex + 1) % Object.keys(this.modes).length
+        return (this._modeIndex + 1) % Object.keys(this.modes).length
     }
 
     /**
@@ -234,13 +234,13 @@ class Pomodoro {
         return JSON.parse(localStorage.getItem('pomolog'));
     }
 
-    #lastLog;
+    _lastLog;
     get lastLog() {
-        return this.#lastLog;
+        return this._lastLog;
     }
 
     set newLog(log) {
-        this.#lastLog = log;
+        this._lastLog = log;
         const fullLog = JSON.parse(localStorage.getItem('pomolog'));
         fullLog.push(log)
 
